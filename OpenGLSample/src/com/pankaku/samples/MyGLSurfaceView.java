@@ -12,58 +12,65 @@ public class MyGLSurfaceView extends GLSurfaceView {
 	private float mHeight;
 	private MyRenderer mMyRenderer;
 	private MyGameThread mGameThread;
-	
-	public MyGLSurfaceView(Context context , MyGameThread gameThread) {
+	private final static int INTERVAL = 60;
+
+	public MyGLSurfaceView(Context context, MyGameThread gameThread) {
 		super(context);
 		this.mGameThread = gameThread;
-		
-		setFocusable(true); //touchEventを取得できるようにする
+
+		setFocusable(true); // touchEventを取得できるようにする
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		//float x = (event.getX() / (float)mWidth) * 2.0f - 1.0f;
-		//float y = (event.getY() / (float)mHeight) * -3.0f + 1.5f;
-		
-		/*if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			mGameThread.runStart();
-		}
-		if (event.getAction() == MotionEvent.ACTION_UP) {
-			//mGameThread.runStop();
-			Log.d("STOP","UPNOW");
-		}
-		*/
-		switch(event.getAction()) {
+		float x = (event.getX() / (float) mWidth) * 2.0f - 1.0f;
+		float y = (event.getY() / (float) mHeight) * -3.0f + 1.5f;
+
+		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			mGameThread.runStart();
-			Log.d("MotionEvent","DOWN");
+			mGameThread.tX = x;
+			mGameThread.tY = y;
+			
+			Log.d("XY", "tX:" + mGameThread.tX + "tY:" + mGameThread.tY);
+			
+			if (mGameThread.tX > mGameThread.posX) {
+				mGameThread.speedX = (mGameThread.tX - mGameThread.posX) / INTERVAL;
+			} else if (mGameThread.tX < mGameThread.posX) {
+				mGameThread.speedX = (mGameThread.posX - mGameThread.tX) / INTERVAL;
+			}
+			 //Log.d("Speed","SpeedX:"+mGameThread.speedX);
+			
+			if (mGameThread.tY > mGameThread.posY) {
+				mGameThread.speedY = (mGameThread.tY - mGameThread.posY) / INTERVAL;
+			} else if (mGameThread.tX < mGameThread.posX) {
+				mGameThread.speedY = (mGameThread.posY - mGameThread.tY) / INTERVAL;
+			}
 			break;
 		case MotionEvent.ACTION_UP:
 			mGameThread.runStop();
-			Log.d("MotionEvent", "UP");
 			break;
 		default:
 			break;
 		}
-		
-		/*ここをfalseにするとACTION_DOWNを取得後にfalseを返してしまい、
-		 * その後追いかけるのをやめてしまうためtrueにする
-		 * */
+
+		/*
+		 * ここをfalseにするとACTION_DOWNを取得後にfalseを返してしまい、 その後追いかけるのをやめてしまうためtrueにする
+		 */
 		return true;
 	}
-	
+
 	@Override
 	public void setRenderer(Renderer renderer) {
 		super.setRenderer(renderer);
-		this.mMyRenderer = (MyRenderer)renderer;
+		this.mMyRenderer = (MyRenderer) renderer;
 	}
-	
+
 	@Override
-	public void surfaceChanged(SurfaceHolder holder,int format, int w, int h) {
+	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
 		super.surfaceChanged(holder, format, w, h);
 		this.mWidth = w;
 		this.mHeight = h;
 	}
-	
-	
+
 }

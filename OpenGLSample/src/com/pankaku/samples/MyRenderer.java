@@ -24,6 +24,9 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 	//private float v = 0.0f;
 	private float t_w = 0.2f;
 	private float t_h = 0.35f;
+	private float textureSizeX = 0.5f;
+	private float textureSizeY = 0.5f;
+	
 	// テクスチャを管理するためのID
 	private int mSampleTexture;
 	private int mNumberTexture;
@@ -50,19 +53,8 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 		 * 描画したい桁数 1.0f, 1.0f, 1.0f, 1.0f // 色はそのまま );
 		 */
 
-		GraphicUtil.drawTexture(gl, x, y, 1.0f, 1.0f, mSampleTexture, mGameThread.posU, mGameThread.posV,
-				t_w, t_h, 1.0f, 1.0f, 1.0f, 1.0f);
-		
-		/*try {
-			Thread.sleep(100);
-		} catch (Exception e) {
-			Log.d("thread", "sleep");
-		}*/
-		/*if (u == 0.0f || u == 0.2f) {
-			u+=0.2f;
-		} else if (u == 0.4f) {
-			u = 0.0f;
-		}*/
+		GraphicUtil.drawTexture(gl, mGameThread.posX, mGameThread.posY, textureSizeX, textureSizeY, mSampleTexture, mGameThread.posU, mGameThread.posV,
+				t_w, t_h, 1.0f, 1.0f, 1.0f,1.0f);
 		
 		//fps表示
 		long nowTime = System.currentTimeMillis();
